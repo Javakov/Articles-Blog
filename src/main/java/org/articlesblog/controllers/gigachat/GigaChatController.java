@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Tag(name = "GigaChat")
@@ -34,7 +36,8 @@ public class GigaChatController {
         String promt = gigaChatConfig.getPromtSummary();
         log.info("Промт: " + promt);
 
-        String summary = gigaChatService.getAnswer(text, promt);
+        String encodedText = URLEncoder.encode(text, StandardCharsets.UTF_8);
+        String summary = gigaChatService.getAnswer(encodedText, promt);
         log.info("Суммари" + summary);
 
         return ResponseEntity.ok(summary);
