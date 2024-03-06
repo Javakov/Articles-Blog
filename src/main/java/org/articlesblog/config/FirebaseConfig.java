@@ -13,7 +13,7 @@ import java.io.IOException;
 @Slf4j
 @Getter
 public class FirebaseConfig {
-    private static final String FILE_NAME = "articles-b1def-firebase-adminsdk-e85q5-51852b2062.json";
+    private static final String FILE_NAME = "articles-blog-4e455-01a08500da81.json";
 
     private Storage storage;
 

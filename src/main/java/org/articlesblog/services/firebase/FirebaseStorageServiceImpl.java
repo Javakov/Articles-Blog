@@ -23,9 +23,9 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class FirebaseStorageServiceImpl implements FirebaseStorageService {
-    private static final String BUCKET_NAME = "articles-b1def.appspot.com";
+    private static final String BUCKET_NAME = "articles-blog-4e455.appspot.com";
     private final Storage storage;
-    private static final String IMAGE_NAME = "https://firebasestorage.googleapis.com/v0/b/articles-b1def.appspot.com/o/article-image.jpg?alt=media&token=b53c0587-d2d6-4e5f-b788-0c7bae76d2ba";
+    private static final String IMAGE_NAME = "https://firebasestorage.googleapis.com/v0/b/articles-blog-4e455.appspot.com/o/default_image.png?alt=media&token=19fd5ec5-bcaf-434e-af82-888a52bcf2ff";
 
     public FirebaseStorageServiceImpl() throws IOException {
         FirebaseConfig config = new FirebaseConfig();
