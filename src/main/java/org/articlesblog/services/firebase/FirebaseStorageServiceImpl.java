@@ -4,6 +4,7 @@ import com.google.cloud.storage.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.articlesblog.config.FirebaseConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +24,12 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class FirebaseStorageServiceImpl implements FirebaseStorageService {
-    private static final String BUCKET_NAME = "articles-blog-4e455.appspot.com";
+    @Value("${firebase.storage.bucket-name}")
+    private String BUCKET_NAME;
+
+    @Value("${firebase.storage.image-name}")
+    private String IMAGE_NAME;
     private final Storage storage;
-    private static final String IMAGE_NAME = "https://firebasestorage.googleapis.com/v0/b/articles-blog-4e455.appspot.com/o/default_image.png?alt=media&token=19fd5ec5-bcaf-434e-af82-888a52bcf2ff";
 
     public FirebaseStorageServiceImpl() throws IOException {
         FirebaseConfig config = new FirebaseConfig();
@@ -55,7 +59,7 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
                 ImageIO.write(resizedImage, "jpg", path.toFile());
 
-                BlobId blobId = BlobId.of(BUCKET_NAME, fileName);
+                BlobId blobId = BlobId.of(BUCKET_NAME, "img/" + fileName);
                 BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();
                 Blob blob = storage.create(blobInfo, Files.readAllBytes(path));
                 Files.delete(path);
