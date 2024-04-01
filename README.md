@@ -1,3 +1,5 @@
+![Application Hldd](hldd_final.png)
+
 **Статья**
 
 * Создание статьи
