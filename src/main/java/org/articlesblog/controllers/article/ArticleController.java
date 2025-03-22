@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.articlesblog.dto.articledto.CreateArticleDTO;
-import org.articlesblog.dto.articledto.EditArticleDTO;
-import org.articlesblog.services.article.ArticleService;
+import org.articlesblog.dto.CreateArticleDTO;
+import org.articlesblog.dto.EditArticleDTO;
+import org.articlesblog.services.ArticleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
