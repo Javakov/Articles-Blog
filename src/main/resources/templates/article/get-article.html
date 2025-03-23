@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fonts.css">
 </head>
 
 <body>
@@ -20,9 +21,9 @@
 
 <div class="centered-content">
     <div class="form">
-        <h1 class="h1__withLine"> <span th:text="${article.title}"></span> </h1>
+        <h1 class="h1__withLine ubuntu-medium"> <span th:text="${article.title}"></span> </h1>
         <div class="form-box">
-            <div class="text__get-article">
+            <div class="text__get-article ubuntu-regular">
                 <p><strong>Метка:</strong> <span th:text="${article.label}"></span></p>
                 <p><strong>Автор:</strong> <span th:text="${article.author}"></span></p>
                 <p><strong>Дата создания:</strong> <span th:text="${article.dateCreate}"></span></p>
@@ -37,16 +38,16 @@
         <h1 class="h1__withLine"></h1>
 
         <div class="container">
-            <div class="col-sm-12 mt-5">
+            <div class="col-sm-12 mt-5 ubuntu-regular">
                 <div id="imageArticles" th:utext="${article.text}">Text</div>
             </div>
         </div>
         <br>
         <form id="articleFormDelete" th:action="@{/articles/delete/{id}(id=${article.id})}" method="POST"
               th:object="${article}">
-            <button type="button" onclick="submitForm()" class="btn btn-outline-danger">Удалить статью</button>
+            <button type="button" onclick="submitForm()" class="btn btn-outline-danger ubuntu-medium">Удалить статью</button>
             <a th:href="@{/articles/edit/{id}(id=${article.id})}">
-                <button type="button" class="btn btn btn-outline-warning">Редактировать</button>
+                <button type="button" class="btn btn btn-outline-warning ubuntu-medium">Редактировать</button>
             </a>
         </form>
     </div>

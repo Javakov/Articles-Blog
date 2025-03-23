@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link th:rel="stylesheet" th:href="@{/assets/simplemde/simplemde.min.css} "/>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fonts.css">
 </head>
 
 <body>
@@ -23,9 +24,9 @@
 
 <div class="centered-content">
     <form class="form" id="articleForm">
-        <h1 class="h1__withLine"> Создание статьи </h1>
+        <h1 class="h1__withLine ubuntu-medium"> Создание статьи </h1>
         <div class="form-box">
-            <div class="form-box__text">
+            <div class="form-box__text ubuntu-regular">
                 <div class="text-field">
                     <input class="text-field__inp" type="text" id="label" name="label" required maxlength="240">
                     <label class="text-field__placeholder" for="label">Метка:</label>
@@ -52,7 +53,7 @@
             </div>
         </div>
 
-        <div class="text-field">
+        <div class="text-field ubuntu-regular">
             <div>
                 <label class="text-field__area" for="description">Краткое описание:</label>
                 <textarea id="description" name="description" required maxlength="240"></textarea>
@@ -66,8 +67,7 @@
             <progress id="progressBar" style="display: none;" value="0" max="100"></progress>
         </div>
 
-        <button type="submit" onclick="submitForm()" class="btn btn-outline-success">Создать статью</button>
-        <button type="submit" onclick="generateArticle()" class="btn btn-outline-primary">Сгенерировать статью</button>
+        <button type="submit" onclick="submitForm()" class="btn btn-outline-success ubuntu-medium">Создать статью</button>
     </form>
 </div>
 
@@ -113,48 +113,6 @@
             }
         };
         xhr.send(formData);
-    }
-
-    function generateArticle() {
-        document.getElementById('progressBar').value = 10;
-        const label = document.getElementById('label').value;
-        const title = document.getElementById('title').value;
-        const description = document.getElementById('description').value;
-        console.log("label: " + label);
-        console.log("title: " + title);
-        console.log("description: " + description);
-
-        const articleColumns = `${label}\n${title}\n${description}`;
-
-        if (label === '' || title === '' || description === '') {
-            console.log("Что-то пусто: " + label + title + description);
-            return;
-        }
-
-        document.getElementById('progressBar').style.display = 'block';
-        document.getElementById('progressBar').value = 30;
-
-        fetch('/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ articleColumns }),
-        })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('progressBar').value = 50;
-                console.log('Полученный текст статьи:', data);
-                const pos = simplemde.codemirror.getCursor();
-                simplemde.codemirror.setSelection(pos, pos);
-                simplemde.codemirror.replaceSelection(data);
-
-                document.getElementById('progressBar').value = 100;
-                document.getElementById('progressBar').style.display = 'none';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
     }
 
     function previewImage() {

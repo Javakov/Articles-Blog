@@ -1,34 +1,20 @@
 package org.articlesblog.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+import java.util.UUID;
+
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetArticleDTO {
-    int id;
-    String title;
-    String text;
-    String author;
-    String label;
-    String dateCreate;
-    String dateChange;
-    String image;
-
-    @Override
-    public String toString() {
-        return "Статья: " +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                ", author='" + author + '\'' +
-                ", label='" + label + '\'' +
-                ", dateCreate='" + dateCreate + '\'' +
-                ", dateChange='" + dateChange + '\'' +
-                ", image='" + image + '\'';
-    }
+    private UUID id;
+    private String title;
+    private String text;
+    private String author;
+    private String label;
+    private String dateCreate;
+    private String dateChange;
+    private String image;
 }

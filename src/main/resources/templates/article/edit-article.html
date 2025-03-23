@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link th:rel="stylesheet" th:href="@{/assets/simplemde/simplemde.min.css} "/>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fonts.css">
 </head>
 
 <body>
@@ -23,8 +24,8 @@
 <div class="centered-content">
     <form class="form" id="articleForm" th:action="@{/articles/edit/{id}(id=${article.id})}" method="POST"
           th:object="${article}">
-        <h1 class="h1__withLine"> Изменение статьи </h1>
-        <div class="form-box">
+        <h1 class="h1__withLine ubuntu-medium"> Изменение статьи </h1>
+        <div class="form-box ubuntu-regular">
             <div class="form-box__text">
                 <div class="text-field">
                     <input class="text-field__inp" type="text" id="label" name="label" th:field="*{label}" required maxlength="240">
@@ -53,7 +54,7 @@
             </div>
         </div>
 
-        <div class="text-field">
+        <div class="text-field ubuntu-regular">
             <div>
                 <label class="text-field__area" for="description">Краткое описание:</label>
                 <textarea id="description" name="description" required th:field="*{description}" maxlength="240"></textarea>
@@ -65,7 +66,7 @@
             </div>
         </div>
 
-        <button type="button" onclick="submitForm()" class="btn btn-outline-success">Обновить статью</button>
+        <button type="button" onclick="submitForm()" class="btn btn-outline-success ubuntu-medium">Обновить статью</button>
     </form>
 </div>
 

@@ -2,39 +2,44 @@ package org.articlesblog.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "articles")
 @Data
 public class Article {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     @Column(name = "id")
-    private Integer id;
+    private UUID id;
 
-    @Column(name = "title", length = 250)
+    @Column(name = "title", length = 100)
     private String title;
 
     @Column(name = "description", length = 250)
     private String description;
 
-    @Column(name = "text", columnDefinition = "text")
+    @Column(name = "text")
     private String text;
 
-    @Column(name = "author", length = 250)
+    @Column(name = "author", length = 100)
     private String author;
 
-    @Column(name = "label", length = 250)
+    @Column(name = "label", length = 100)
     private String label;
 
     @Column(name = "image", length = 500)
     private String image;
 
-    @Column(name = "date_create", nullable = false, columnDefinition = "timestamp with time zone")
-    private LocalDateTime dateCreate;
+    @CreationTimestamp
+    @Column(name = "date_create", nullable = false)
+    private ZonedDateTime dateCreate;
 
-    @Column(name = "date_change", columnDefinition = "timestamp with time zone")
-    private LocalDateTime dateChange;
+    @UpdateTimestamp
+    @Column(name = "date_change", nullable = false)
+    private ZonedDateTime dateChange;
 }

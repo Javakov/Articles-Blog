@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1_create_table_articles.sql
+      author: yakov.moskvichev
+      sqlFile:
+        path: ../V1_create_table_articles.sql
+        splitStatements: false
+        relativeToChangelogFile: true

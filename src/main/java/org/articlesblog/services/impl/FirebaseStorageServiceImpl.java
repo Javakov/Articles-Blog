@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -40,47 +41,68 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
     @Override
     public String uploadImage(MultipartFile file) {
         try {
-            if (!file.isEmpty()) {
-                String fileName = UUID.randomUUID() + "-" + Objects.requireNonNull(file.getOriginalFilename()).replaceAll("\\s+", "");
-                Path path = Paths.get(fileName);
-                Files.copy(file.getInputStream(), path);
-
-                BufferedImage originalImage = ImageIO.read(path.toFile());
-
-                int width = 660;
-                int height = (int) (originalImage.getHeight() * ((double) width / originalImage.getWidth()));
-
-                BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
-
-                Graphics2D g2d = resizedImage.createGraphics();
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-                g2d.drawImage(originalImage, 0, 0, width, height, null);
-                g2d.dispose();
-
-                ImageIO.write(resizedImage, "jpg", path.toFile());
-
-                BlobId blobId = BlobId.of(BUCKET_NAME, "img/" + fileName);
-                BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();
-                Blob blob = storage.create(blobInfo, Files.readAllBytes(path));
-                Files.delete(path);
-
-                log.info("Загружено пользовательское изображение...");
-                return "https://firebasestorage.googleapis.com/v0/b/" + blob.getBucket() + "/o/" +
-                        encodeURIComponent(blob.getName()) + "?alt=media&token=" + UUID.randomUUID();
-            } else {
-                log.info("Загружено стандартное изображение...");
+            if (file.isEmpty()) {
                 return IMAGE_NAME;
             }
+
+            String fileName = generateFileName(file);
+            Path filePath = saveFileToTemp(file, fileName);
+
+            BufferedImage resizedImage = resizeImage(filePath);
+            saveResizedImage(filePath, resizedImage);
+
+            Blob blob = uploadToFirebase(fileName, filePath);
+
+            Files.delete(filePath);
+
+            return generateFileUrl(blob);
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload image", e);
         }
     }
 
+    private String generateFileName(MultipartFile file) {
+        return UUID.randomUUID() + "-" + Objects.requireNonNull(file.getOriginalFilename()).replaceAll("\\s+", "");
+    }
+
+    private Path saveFileToTemp(MultipartFile file, String fileName) throws IOException {
+        Path path = Paths.get(fileName);
+        Files.copy(file.getInputStream(), path);
+        return path;
+    }
+
+    private BufferedImage resizeImage(Path path) throws IOException {
+        BufferedImage originalImage = ImageIO.read(path.toFile());
+        int width = 660;
+        int height = (int) (originalImage.getHeight() * ((double) width / originalImage.getWidth()));
+
+        BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.drawImage(originalImage, 0, 0, width, height, null);
+        g2d.dispose();
+
+        return resizedImage;
+    }
+
+    private void saveResizedImage(Path path, BufferedImage resizedImage) throws IOException {
+        ImageIO.write(resizedImage, "jpg", path.toFile());
+    }
+
+    private Blob uploadToFirebase(String fileName, Path filePath) throws IOException {
+        BlobId blobId = BlobId.of(BUCKET_NAME, "img/" + fileName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/jpeg").build();
+        return storage.create(blobInfo, Files.readAllBytes(filePath));
+    }
+
+    private String generateFileUrl(Blob blob) {
+        return "https://firebasestorage.googleapis.com/v0/b/" + blob.getBucket() + "/o/" +
+                encodeURIComponent(blob.getName()) + "?alt=media&token=" + UUID.randomUUID();
+    }
+
     @Override
     public String updateImage(String id, MultipartFile file) {
         deleteImage(id);
-        log.info("Изменяем изображение...");
         return uploadImage(file);
     }
 
@@ -88,8 +110,14 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
     public void deleteImage(String id) {
         if (!Objects.equals(id, IMAGE_NAME)) {
             String fileName = id.substring(id.lastIndexOf("/") + 1, id.indexOf("?"));
-            storage.get(BUCKET_NAME, fileName).delete();
-            log.info("Изображение удалено.");
+            fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+            Blob blob = storage.get(BUCKET_NAME, fileName);
+            if (blob != null) {
+                blob.delete();
+                log.info("Deleted image: {}", fileName);
+            } else {
+                log.warn("Image with filename '{}' not found in Firebase Storage, skipping deletion", fileName);
+            }
         }
     }
 

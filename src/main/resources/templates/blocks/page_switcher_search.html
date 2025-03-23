@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <title>Page Switcher Search</title>
+</head>
+
+<body>
+<div th:fragment="page_switcher_search">
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col">
+                <a th:if="${currentPage > 1}"
+                   th:href="@{/articles/search/page/{id}(id=${currentPage - 1}, searchText=${searchText})}">
+                    <button type="button" class="btn btn-secondary ubuntu-medium">Назад</button>
+                </a>
+            </div>
+            <div class="col text-center ubuntu-medium">
+                <p>Страница <span th:text="${currentPage}"></span> из <span th:text="${totalPages}"></span></p>
+            </div>
+            <div class="col text-end">
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{/articles/search/page/{id}(id=${currentPage + 1}, searchText=${searchText})}">
+                    <button type="button" class="btn btn-secondary ubuntu-medium">Вперед</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

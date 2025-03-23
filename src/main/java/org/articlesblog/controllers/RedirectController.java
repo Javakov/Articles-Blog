@@ -16,14 +16,12 @@ public class RedirectController {
     @GetMapping("/")
     @Operation(summary = "Переадресация на главную страницу")
     public String slashArticles() {
-        log.info("Переадресация на главную страницу...");
         return "redirect:/articles/page/1";
     }
 
     @GetMapping("/articles")
     @Operation(summary = "Переадресация на главную страницу")
     public String anotherSlashArticles() {
-        log.info("Переадресация на главную страницу...");
         return "redirect:/articles/page/1";
     }
 }

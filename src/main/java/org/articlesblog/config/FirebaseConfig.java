@@ -13,14 +13,13 @@ import java.io.IOException;
 @Slf4j
 @Getter
 public class FirebaseConfig {
-    private static final String FILE_NAME = "articles-blog-4e455-01a08500da81.json";
+    private static final String FILE_NAME = "src/main/resources/articles-blog-4e455-01a08500da81.json";
 
     private Storage storage;
 
     public FirebaseConfig() throws IOException {
-        log.info("Инициализацие Firebase...");
         init();
-        log.info("Firebase инициализировался.");
+        log.info("Firebase initialized");
     }
 
     @PostConstruct
